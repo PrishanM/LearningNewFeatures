@@ -3,6 +3,9 @@ package com.jkcs.android.prishan.androidnewapp.view.ui;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -14,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.jkcs.android.prishan.androidnewapp.R;
+import com.jkcs.android.prishan.androidnewapp.service.model.Project;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -42,6 +46,8 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        setFragment("Project");
     }
 
     @Override
@@ -84,7 +90,9 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_camera) {
             // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        }else if (id == R.id.nav_project) {
+            setFragment("Project");
+        }else if (id == R.id.nav_gallery) {
 
         } else if (id == R.id.nav_slideshow) {
 
@@ -99,6 +107,37 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void show(Project project) {
+        /*ProjectFragment projectFragment = ProjectFragment.forProject(project.name);
+
+        getSupportFragmentManager()
+                .beginTransaction()
+                .addToBackStack("project")
+                .replace(R.id.fragment_container,
+                        projectFragment, null).commit();*/
+    }
+
+
+    private void setFragment( String fragmentName ) {
+
+        Fragment fr = null;
+
+        if( fragmentName.equalsIgnoreCase("Project")){
+
+            fr = new ProjectListFragment();
+
+        }
+
+        FragmentManager fm = getSupportFragmentManager();
+
+        FragmentTransaction fragmentTransaction = fm.beginTransaction();
+
+        fragmentTransaction.replace(R.id.content_frame, fr);
+
+        fragmentTransaction.commit();
+
     }
 
 

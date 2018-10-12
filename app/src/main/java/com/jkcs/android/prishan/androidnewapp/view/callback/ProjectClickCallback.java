@@ -5,5 +5,4 @@ import com.jkcs.android.prishan.androidnewapp.service.model.Project;
 public interface ProjectClickCallback {
 
     void onClick(Project project);
-
 }
