@@ -70,7 +70,7 @@ public class ProjectListFragment extends Fragment {
             if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED)) {
 
                 Intent i = new Intent(getContext(),ProjectDetailActivity.class);
-                i.putExtra("PROD_ID",project.id);
+                i.putExtra("PROD_NAME",project.name);
                 startActivity(i);
                 //((MainActivity) getActivity()).show(project);
             }

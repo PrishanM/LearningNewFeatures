@@ -23,10 +23,10 @@ public class ProjectDetailActivity extends AppCompatActivity {
 
         detailsBinding = DataBindingUtil.setContentView(this, R.layout.fragment_project_details);
 
-        long projectId = getIntent().getLongExtra("PROD_ID",0);
+        String projectName = getIntent().getStringExtra("PROD_NAME");
 
         ProjectDetailViewModel.Factory factory = new ProjectDetailViewModel.Factory(
-                getApplication(), String.valueOf(projectId));
+                getApplication(), projectName);
 
         projectDetailViewModel = ViewModelProviders.of(this, factory)
                 .get(ProjectDetailViewModel.class);
