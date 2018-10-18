@@ -10,8 +10,5 @@ import dagger.android.ContributesAndroidInjector;
 public abstract class FragmentBuildersModule {
 
     @ContributesAndroidInjector
-    abstract ProjectDetailActivity contributeProjectDetailActivity();
-
-    @ContributesAndroidInjector
     abstract ProjectListFragment contributeProjectListFragment();
 }

@@ -2,6 +2,7 @@ package com.jkcs.android.prishan.androidnewapp.view.ui;
 
 import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
@@ -15,6 +16,7 @@ import android.view.ViewGroup;
 
 import com.jkcs.android.prishan.androidnewapp.R;
 import com.jkcs.android.prishan.androidnewapp.databinding.FragmentProjectListBinding;
+import com.jkcs.android.prishan.androidnewapp.di.Injectable;
 import com.jkcs.android.prishan.androidnewapp.service.model.Project;
 import com.jkcs.android.prishan.androidnewapp.view.adapter.ProjectAdapter;
 import com.jkcs.android.prishan.androidnewapp.view.callback.ProjectClickCallback;
@@ -22,11 +24,16 @@ import com.jkcs.android.prishan.androidnewapp.viewmodel.ProjectListViewModel;
 
 import java.util.List;
 
-public class ProjectListFragment extends Fragment {
+import javax.inject.Inject;
+
+public class ProjectListFragment extends Fragment implements Injectable {
 
     public static final String TAG = "ProjectListFragment";
     private ProjectAdapter projectAdapter;
     private FragmentProjectListBinding binding;
+
+    @Inject
+    ViewModelProvider.Factory factory;
 
 
     @Nullable
@@ -46,34 +53,28 @@ public class ProjectListFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         final ProjectListViewModel viewModel =
-                ViewModelProviders.of(this).get(ProjectListViewModel.class);
+                ViewModelProviders.of(this,factory).get(ProjectListViewModel.class);
 
         observeViewModel(viewModel);
     }
 
     private void observeViewModel(ProjectListViewModel viewModel) {
         // Update the list when the data changes
-        viewModel.getProjectListObservable().observe(this, new Observer<List<Project>>() {
-            @Override
-            public void onChanged(@Nullable List<Project> projects) {
-                if (projects != null) {
-                    binding.setIsLoading(false);
-                    projectAdapter.setProjectList(projects);
-                }
+        viewModel.getProjectListObservable().observe(this, projects -> {
+            if (projects != null) {
+                binding.setIsLoading(false);
+                projectAdapter.setProjectList(projects);
             }
         });
     }
 
-    private final ProjectClickCallback projectClickCallback = new ProjectClickCallback() {
-        @Override
-        public void onClick(Project project) {
-            if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED)) {
+    private final ProjectClickCallback projectClickCallback = project -> {
+        if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED)) {
 
-                Intent i = new Intent(getContext(),ProjectDetailActivity.class);
-                i.putExtra("PROD_NAME",project.name);
-                startActivity(i);
-                //((MainActivity) getActivity()).show(project);
-            }
+            Intent i = new Intent(getContext(),ProjectDetailActivity.class);
+            i.putExtra("PROD_NAME",project.name);
+            startActivity(i);
+            //((MainActivity) getActivity()).show(project);
         }
     };
 }
