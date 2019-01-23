@@ -9,3 +9,5 @@ This includes new features in Android
 5) Using ORM (Room)
 6) Using 'Retrofit 2' Networking Library
 7) Dependency injection (Dagger 2)
+
+# Steps to follow
